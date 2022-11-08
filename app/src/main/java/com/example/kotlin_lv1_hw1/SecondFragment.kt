@@ -39,13 +39,15 @@ class SecondFragment : Fragment() {
                 }
             }
 
-        binding.back.setOnClickListener {
-            val trasaction = this.activity?.supportFragmentManager?.beginTransaction()
-            if (trasaction != null) {
-                trasaction.remove(this)
-                trasaction.commit()
+
+            binding.tnum.setOnClickListener {
+                val trasaction = this.activity?.supportFragmentManager?.beginTransaction()
+                if (trasaction != null) {
+                    trasaction.remove(this)
+                    trasaction.commit()
+                }
             }
-        }
+
             return binding.root
     }
 
