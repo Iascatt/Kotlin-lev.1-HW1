@@ -5,23 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FirstFragment">
-    <ScrollView
-        android:id="@+id/sview"
-        android:layout_width="match_parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rview"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/table_size"
         app:layout_constraintBottom_toTopOf="@id/button_first"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <TableLayout
-            android:id="@+id/tablelayout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/table_size"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-    </ScrollView>
+        app:layout_constraintTop_toTopOf="parent"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
     <Button
         android:id="@+id/button_first"
         android:layout_width="wrap_content"
@@ -30,7 +23,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sview" />
+        app:layout_constraintTop_toBottomOf="@id/rview" />
 
     <TextView
         android:id="@+id/total_str"

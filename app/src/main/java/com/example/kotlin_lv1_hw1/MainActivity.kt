@@ -12,8 +12,6 @@ import android.view.MenuItem
 import com.example.kotlin_lv1_hw1.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +19,11 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-    }
 
+        if (savedInstanceState == null) {
+            val trasaction = supportFragmentManager.beginTransaction()
+            trasaction.replace(R.id.container, createFirstFragment(""))
+            trasaction.commit()
+        }
+    }
 }

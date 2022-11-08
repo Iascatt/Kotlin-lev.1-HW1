@@ -4,21 +4,24 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.TEXT_ALIGNMENT_CENTER
 import android.view.ViewGroup
-import android.widget.TableRow
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.kotlin_lv1_hw1.databinding.FragmentFirstBinding
-import java.lang.invoke.ConstantCallSite
 
 
 const val SAVING_KEY = "key"
 const val LANDS_N_COLS = 4
 const val PORTR_N_COLS = 3
-const val margin = 50
-const val CARD_SIZE = 180
 
+
+fun createFirstFragment(
+    field: String
+): FirstFragment {
+    return FirstFragment().apply {
+        arguments = Bundle().apply { putString("key", field) }
+    }
+}
 
 class FirstFragment : Fragment() {
 
@@ -31,24 +34,19 @@ class FirstFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
+
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var numberOfCards = savedInstanceState?.getInt(SAVING_KEY) ?:0
-        drawTable(numberOfCards)
-        binding.totalNum.text = numberOfCards.toString()
-        binding.buttonFirst.setOnClickListener {
-            numberOfCards++
-            binding.totalNum.text = numberOfCards.toString()
-            addCard(numberOfCards)
-        }
-    }
+        var numOfCards = savedInstanceState?.getInt(SAVING_KEY) ?: 0
 
-    private fun addCard(cardNum: Int) {
-        val tl = binding.tablelayout
-        val row: TableRow
+        binding.totalNum.text = numOfCards.toString()
+
+
+        val cardsList: MutableList<Int> = (0..numOfCards).toMutableList()
         val orientation = activity?.resources?.configuration?.orientation
             ?: Configuration.ORIENTATION_PORTRAIT
         val ncols: Int
@@ -57,44 +55,17 @@ class FirstFragment : Fragment() {
         } else {
             ncols = LANDS_N_COLS
         }
-        if (cardNum % ncols == 1) {
-            row = TableRow(activity)
-            row.layoutParams = TableRow.LayoutParams(
-                TableRow.LayoutParams.WRAP_CONTENT,
-                TableRow.LayoutParams.WRAP_CONTENT
-            )
-            tl.addView(row)
-        } else {
-            row = binding.tablelayout.getChildAt((cardNum - 1) / ncols) as TableRow
-        }
-        val card = TextView(activity)
-
-        card.text = cardNum.toString()
-        card.textSize = resources.getDimension(R.dimen.text_size)
-        card.textAlignment = TEXT_ALIGNMENT_CENTER
-        card.setTextColor(resources.getColor(R.color.black))
-
-        if (cardNum % 2 == 0) {
-            card.setBackgroundColor(resources.getColor(R.color.red))
-        } else {
-            card.setBackgroundColor(resources.getColor(R.color.blue))
-        }
-
-        val params: TableRow.LayoutParams =
-            TableRow.LayoutParams(
-                TableRow.LayoutParams.WRAP_CONTENT,
-                TableRow.LayoutParams.WRAP_CONTENT)
 
 
-        params.height = CARD_SIZE
-        params.width = CARD_SIZE
-        params.setMargins(margin, margin, margin, margin)
-        row.addView(card, params)
-    }
+        val mainAdapter = MainAdapter(cardsList, this)
+        binding.rview.adapter = mainAdapter
+        binding.rview.layoutManager = GridLayoutManager(view.context, ncols)
 
-    private fun drawTable(numberOfCards: Int) {
-        for (i in 1..numberOfCards) {
-            addCard(i)
+        binding.buttonFirst.setOnClickListener {
+            numOfCards++
+            binding.totalNum.text = numOfCards.toString()
+            cardsList.add(numOfCards)
+            mainAdapter.notifyDataSetChanged()
         }
     }
 
